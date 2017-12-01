@@ -1,0 +1,6 @@
+Puppetfile.lock
+.librarian
+.tmp/
+.vagrant/
+modules/*
+webroot/*
