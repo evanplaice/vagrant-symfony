@@ -1,6 +1,8 @@
 Puppetfile.lock
-.librarian
+.librarian/
 .tmp/
 .vagrant/
+database/*
 modules/*
 webroot/*
+.env
