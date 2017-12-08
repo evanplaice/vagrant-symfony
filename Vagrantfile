@@ -22,10 +22,10 @@ Vagrant.configure(2) do |config|
   config.env.enable
 
   # config Virtual Machine
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.hostname = "symfony"
-  config.vm.network :forwarded_port, guest: 80, host: 8888
-  config.vm.synced_folder "./webroot/web", "/vagrant/webroot/web",
+  config.vm.box = ENV['BOX']
+  config.vm.hostname = ENV['HOST_NAME']
+  config.vm.network :forwarded_port, host: ENV['PORT_HOST'], guest: ENV['PORT_GUEST']
+  config.vm.synced_folder ENV['WEBROOT_HOST'], ENV['WEBROOT_GUEST'],
     :owner => "vagrant",
     :group => "www-data",
     :mount_options => ["dmode=775","fmode=775"]
@@ -41,8 +41,8 @@ Vagrant.configure(2) do |config|
 
   # config Virtual Box
   config.vm.provider :virtualbox do |vb|
-    vb.name = "Symfony"
-    vb.memory = 4096
+    vb.name = ENV['VM_NAME']
+    vb.memory = ENV['VM_MEMORY']
   end
 
   # update Puppet
