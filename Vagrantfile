@@ -11,12 +11,16 @@ end
 
 require_plugins(%w{
   vagrant-aws
+  vagrant-env
   vagrant-hostmanager
   vagrant-puppet-install
   vagrant-vbguest
 })
 
 Vagrant.configure(2) do |config|
+  # use env vars
+  config.env.enable
+
   # config Virtual Machine
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = "symfony"
