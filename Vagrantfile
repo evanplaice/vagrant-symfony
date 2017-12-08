@@ -46,10 +46,7 @@ Vagrant.configure(2) do |config|
   
   # load Puppet modules
   config.vm.provision :shell do |shell|
-    shell.inline = "gem install librarian-puppet"
-  end
-  config.vm.provision :shell do |shell|
-    shell.inline = "cd /vagrant && librarian-puppet install"
+    shell.inline = "gem install --no-rdoc --no-ri librarian-puppet && cd /vagrant && librarian-puppet install"
   end
 
   # config Puppet
