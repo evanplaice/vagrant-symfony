@@ -34,10 +34,7 @@ Vagrant.configure(2) do |config|
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
-  config.hostmanager.aliases = %w(
-    app.symfony
-    dev.symfony
-  )
+  config.hostmanager.aliases = ENV['FACTER_VHOST_ALIASES'].split
 
   # config Virtual Box
   config.vm.provider :virtualbox do |vb|
@@ -55,9 +52,9 @@ Vagrant.configure(2) do |config|
 
   # config Puppet
   config.vm.provision :puppet do |puppet|
-    puppet.manifests_path =   "manifests"
-    puppet.manifest_file =    "site.pp"
-    puppet.module_path =      ["modules"]
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file = ENV['PUPPET_MANIFEST']
+    puppet.module_path = ["modules"]
     puppet.facter = {}
     ENV.each do |key, value|
       next unless key =~ /^FACTER_/

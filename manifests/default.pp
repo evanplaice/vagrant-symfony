@@ -7,14 +7,15 @@ class { 'apache':
 }
 include apache::mod::php
 include apache::mod::rewrite
-apache::vhost { 'app.symfony':
+$aliases = split($vhost_aliases, ' ')
+apache::vhost { $aliases[0]:
   port => '80',
-  docroot => '/vagrant/webroot/web',
+  docroot => $vhost_docroot,
   docroot_owner => 'www-data',
   docroot_group => 'www-data',
   directories => [
     {
-      path => '/vagrant/webroot/web',
+      path => $vhost_docroot,
       rewrites => [
         {
           rewrite_cond => ['%{REQUEST_FILENAME} !-f'],
@@ -24,14 +25,14 @@ apache::vhost { 'app.symfony':
     }
   ]
 }
-apache::vhost { 'dev.symfony':
+apache::vhost { $aliases[1]:
   port => '80',
-  docroot => '/vagrant/webroot/web',
+  docroot => $vhost_docroot,
   docroot_owner => 'www-data',
   docroot_group => 'www-data',
   directories => [
     {
-      path => '/vagrant/webroot/web',
+      path => $vhost_docroot,
       rewrites => [
         {
           rewrite_cond => ['%{REQUEST_FILENAME} !-f'],
@@ -48,7 +49,18 @@ class { 'php::composer':}
 include php::extension::curl
 include php::extension::gd
 include php::extension::mysql
+include php::extension::intl
+php::config { "date.timezone=$php_timezone":
+  file    => '/etc/php5/apache2/php.ini',
+  section => 'Date',
+}
 
 class { 'mysql::server':
-  root_password => 'qwe123',
+  remove_default_accounts => true
+}
+mysql::db { $db_name:
+  user     => $db_user,
+  password => $db_password,
+  host     => $db_host,
+  grant    => ['ALL'],
 }
