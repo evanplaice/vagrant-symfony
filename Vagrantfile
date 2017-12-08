@@ -58,6 +58,11 @@ Vagrant.configure(2) do |config|
     puppet.manifests_path =   "manifests"
     puppet.manifest_file =    "site.pp"
     puppet.module_path =      ["modules"]
+    puppet.facter = {}
+    ENV.each do |key, value|
+      next unless key =~ /^FACTER_/
+      puppet.facter[key.gsub(/^FACTER_/, "")] = value
+    end
   end
 
 end
