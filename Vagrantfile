@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-def install_plugins(plugins_required)
+def require_plugins(plugins_required)
   to_install = plugins_required.select { |plugins_required| not Vagrant.has_plugin? plugins_required }
   if not to_install.empty?
     puts "Installing plugins: #{to_install.join(' ')}"
@@ -9,7 +9,7 @@ def install_plugins(plugins_required)
   end
 end
 
-install_plugins(%w{
+require_plugins(%w{
   vagrant-aws
   vagrant-hostmanager
   vagrant-puppet-install
