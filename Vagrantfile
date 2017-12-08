@@ -14,6 +14,7 @@ require_plugins(%w{
   vagrant-env
   vagrant-hostmanager
   vagrant-puppet-install
+  vagrant-triggers
   vagrant-vbguest
 })
 
@@ -60,6 +61,16 @@ Vagrant.configure(2) do |config|
       next unless key =~ /^FACTER_/
       puppet.facter[key.gsub(/^FACTER_/, "")] = value
     end
+  end
+
+  config.trigger.after :up do
+    info "Loading the database..."
+    run_remote "/vagrant/db.sh --restore /vagrant/database/db.sql"
+  end
+
+  config.trigger.before :halt do
+    info "Backing up the database..."
+    run_remote "/vagrant/db.sh --backup"
   end
 
 end
